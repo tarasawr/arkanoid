@@ -5,9 +5,8 @@ using UnityEngine;
 [RequireComponent(typeof(CircleCollider2D))]
 public class Ball : MonoBehaviour
 {
-    [SerializeField] private GameObject hitEffect;
-    [SerializeField] private Rigidbody2D rigidbodyBall;
-    [SerializeField] private int Damage = 1;
+    private Rigidbody2D _rb;
+    private int _damageQty = 1;
 
     private float minspeed = 3f;
     private float speed = 5f;
@@ -20,6 +19,7 @@ public class Ball : MonoBehaviour
 
     private void Start()
     {
+        _rb = GetComponent<Rigidbody2D>();
         //Events.Buff.AddListener(IncreasedDamage);
     }
 
@@ -27,7 +27,7 @@ public class Ball : MonoBehaviour
     {
         if (!IsActive)
         {
-            rigidbodyBall.velocity = new Vector2(Random.Range(minspeed, speed + 1), speed);
+            _rb.velocity = new Vector2(Random.Range(minspeed, speed + 1), speed);
             IsActive = true;
         }
     }
@@ -36,7 +36,7 @@ public class Ball : MonoBehaviour
     {
         if (buff.Equals("2xDamage"))
         {
-            Damage = Mathf.Clamp(Damage * damageBonus, minDamage, maxDamage);
+            _damageQty = Mathf.Clamp(_damageQty * damageBonus, minDamage, maxDamage);
         }
 
         StartCoroutine(ReductionDamage());
@@ -45,24 +45,26 @@ public class Ball : MonoBehaviour
     private IEnumerator ReductionDamage()
     {
         yield return new WaitForSeconds(10);
-        Damage = Mathf.Clamp(Damage / damageBonus, minDamage, maxDamage);
+        _damageQty = Mathf.Clamp(_damageQty / damageBonus, minDamage, maxDamage);
     }
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        if (collision.collider.TryGetComponent(out IDamageable damageable))
+        if (collision.collider.TryGetComponent(out IDamage IDamage))
         {
             Debug.Log("Hit");
-            //SH.PlaySound(1);
+
             foreach (ContactPoint2D hit in collision.contacts)
             {
                 Vector2 point = hit.point;
-                Instantiate(hitEffect, new Vector3(point.x, point.y, 0), Quaternion.identity);
+                // Instantiate(hitEffect, new Vector3(point.x, point.y, 0), Quaternion.identity);
             }
 
-            damageable.TakingDamage(Damage);
+            //SH.PlaySound(1);
+            IDamage.TakeDamage(_damageQty);
         }
-        else if (collision.collider.TryGetComponent(out Platform platform))
+
+        if (collision.collider.TryGetComponent(out Platform platform))
         {
             Debug.Log("Platform");
 
@@ -75,7 +77,7 @@ public class Ball : MonoBehaviour
                 forceX = (PointX > 0) ? Mathf.Clamp(PointX, 0, 1) : Mathf.Clamp(PointX, -1, 0);
             }
 
-            rigidbodyBall.velocity = new Vector2(forceX * speed, speed);
+            _rb.velocity = new Vector2(forceX * speed, speed);
         }
     }
 
@@ -89,9 +91,9 @@ public class Ball : MonoBehaviour
                 PunchBall();
 
         if (IsActive)
-            if (rigidbodyBall.velocity.y < minspeed && rigidbodyBall.velocity.y >= 0)
-                rigidbodyBall.velocity = new Vector2(rigidbodyBall.velocity.x, minspeed);
-            else if (rigidbodyBall.velocity.y < 0 && rigidbodyBall.velocity.y >= -minspeed)
-                rigidbodyBall.velocity = new Vector2(rigidbodyBall.velocity.x, -minspeed);
+            if (_rb.velocity.y < minspeed && _rb.velocity.y >= 0)
+                _rb.velocity = new Vector2(_rb.velocity.x, minspeed);
+            else if (_rb.velocity.y < 0 && _rb.velocity.y >= -minspeed)
+                _rb.velocity = new Vector2(_rb.velocity.x, -minspeed);
     }
 }

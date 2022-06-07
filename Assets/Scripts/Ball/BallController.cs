@@ -2,7 +2,6 @@ using UnityEngine;
 
 public class BallController : MonoBehaviour
 {
-
     public GameObject BallPref;
     public Transform PossSpawn;
 

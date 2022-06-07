@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 2585947690730912275}
   - component: {fileID: 5751564233940702564}
   m_Layer: 0
-  m_Name: 2xDamage
+  m_Name: DoubeDamage
   m_TagString: 2xDamage
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

@@ -19,11 +19,7 @@ public class Gameplayer : MonoBehaviour
     
     public void DestroyBlock(GameObject block)
     {
-        /*_blocks.Remove(block);
-        if (_blocks.Count <= 0)
-        {
-            //Events.Victory?.Invoke(_maxHeart, Score);
-        }*/
+     
     }
 
 

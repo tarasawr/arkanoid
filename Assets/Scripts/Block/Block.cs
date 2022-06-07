@@ -1,44 +1,49 @@
 using UnityEngine;
+using Random = UnityEngine.Random;
 
-public class Block : MonoBehaviour, IDamageable
+public class Block : MonoBehaviour, IDamage
 {
-    private Gameplayer _gameplayer;
-    private SwitchColor SwitchColor => GetComponent<SwitchColor>();
-    
-    private int _health;
-    private int _maxHealth;
-
-    private GameObject[] buff;
-
-    private void Start()
+    public float MaxHealth
     {
-        SwitchColor.ColorСhange(_health);
-        _maxHealth = _health;
-    }
-    
-    public void TakingDamage(int Damage) 
-    {
-        _health -= Damage;
-        SwitchColor.ColorСhange(_health);
-        if (_health <= 0 && _maxHealth > 0)
+        set
         {
-            Destroy();
+            _maxHealth = _health = value;
+            _healthColor.Сhange(_health / _maxHealth);
         }
     }
-    
-    private void Destroy()
-    {
-        _gameplayer.DestroyBlock(gameObject);
-        Destroy(gameObject);
 
-        if (buff.Length != 0)
+    private HealthColor _healthColor => GetComponent<HealthColor>();
+
+    private float _health;
+    private float _maxHealth;
+
+    private GameObject[] buff;
+   
+    
+    public void TakeDamage(int damageQty)
+    {
+        
+        _health -= damageQty;
+        Debug.Log(_health + " " + _maxHealth);
+        _healthColor.Сhange(_health / _maxHealth);
+
+        if (_health <= 0)
+            Destroy();
+    }
+
+    public void Destroy()
+    {
+        InitBuff();
+        Destroy(gameObject);
+    }
+
+    private void InitBuff()
+    {
+        float rnd = Random.value;
+        if (rnd < 0.5f)
         {
-            float chance = Random.Range(0,101);
-            if (chance <= 15f) 
-            {
-                int count = Random.Range(0, buff.Length);
-                Instantiate(buff[count], transform.position, Quaternion.identity);
-            }
+            int count = Random.Range(0, buff.Length);
+            Instantiate(buff[count], transform.position, Quaternion.identity);
         }
     }
 }

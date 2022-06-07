@@ -1,6 +1,5 @@
 using UnityEngine;
 
-[RequireComponent(typeof(BoxCollider2D))]
 public class Platform : MonoBehaviour
 {
     [SerializeField] private Transform platform;
@@ -15,8 +14,6 @@ public class Platform : MonoBehaviour
 
     private void Start()
     {
-        //Events.Buff.AddListener(UpdateLenghtPlatform);
-
         rightLimit = rightLimitPosition.position.x;
         leftLimit = leftLimitPosition.position.x;
         UpdateLenghtPlatform();
