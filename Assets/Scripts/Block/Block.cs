@@ -1,5 +1,5 @@
+using System;
 using UnityEngine;
-using Random = UnityEngine.Random;
 
 public class Block : MonoBehaviour, IDamage
 {
@@ -12,38 +12,20 @@ public class Block : MonoBehaviour, IDamage
         }
     }
 
-    private HealthColor _healthColor => GetComponent<HealthColor>();
+    public Action<Block> DeadAction;
+    public Buff Buff;
 
+    private HealthColor _healthColor => GetComponent<HealthColor>();
     private float _health;
     private float _maxHealth;
-
     private GameObject[] buff;
-   
-    
+
     public void TakeDamage(int damageQty)
     {
-        
         _health -= damageQty;
-        Debug.Log(_health + " " + _maxHealth);
         _healthColor.Сhange(_health / _maxHealth);
-
+        
         if (_health <= 0)
-            Destroy();
-    }
-
-    public void Destroy()
-    {
-        InitBuff();
-        Destroy(gameObject);
-    }
-
-    private void InitBuff()
-    {
-        float rnd = Random.value;
-        if (rnd < 0.5f)
-        {
-            int count = Random.Range(0, buff.Length);
-            Instantiate(buff[count], transform.position, Quaternion.identity);
-        }
+            DeadAction?.Invoke(this);
     }
 }

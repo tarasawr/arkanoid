@@ -26,7 +26,6 @@ public class HealthColor : MonoBehaviour
 
     public void Сhange(float percent)
     {
-        Debug.Log(percent);
         _sprite.color = _gradient.Evaluate(percent);
     }
 }

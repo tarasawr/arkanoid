@@ -1,8 +1,6 @@
 using System.Collections;
 using UnityEngine;
 
-[RequireComponent(typeof(Rigidbody2D))]
-[RequireComponent(typeof(CircleCollider2D))]
 public class Ball : MonoBehaviour
 {
     private Rigidbody2D _rb;
@@ -15,20 +13,19 @@ public class Ball : MonoBehaviour
     private int minDamage = 1;
     private int maxDamage = 10;
 
-    private bool IsActive = false;
+    private bool _isActive = false;
 
     private void Start()
     {
         _rb = GetComponent<Rigidbody2D>();
-        //Events.Buff.AddListener(IncreasedDamage);
     }
 
-    public void PunchBall()
+    private void PunchBall()
     {
-        if (!IsActive)
+        if (!_isActive)
         {
             _rb.velocity = new Vector2(Random.Range(minspeed, speed + 1), speed);
-            IsActive = true;
+            _isActive = true;
         }
     }
 
@@ -90,7 +87,7 @@ public class Ball : MonoBehaviour
             if (Input.touches[0].phase == TouchPhase.Moved)
                 PunchBall();
 
-        if (IsActive)
+        if (_isActive)
             if (_rb.velocity.y < minspeed && _rb.velocity.y >= 0)
                 _rb.velocity = new Vector2(_rb.velocity.x, minspeed);
             else if (_rb.velocity.y < 0 && _rb.velocity.y >= -minspeed)

@@ -27,8 +27,41 @@ public class BlockController : MonoBehaviour
             GameObject go = Instantiate(BlockPref, Parent);
             go.transform.localPosition += new Vector3(_startPointX + x, y, 1f);
             Block block = go.GetComponent<Block>();
-            block.MaxHealth = _maxRow;
+            block.MaxHealth = x + 1;
+            block.DeadAction = DeadBlock;
+            block.Buff = GetRndBuff();
             _blocksList.Add(block);
+        }
+    }
+
+    private void DeadBlock(Block block)
+    {
+        block.Buff.Apply();
+        Destroy(block.gameObject);
+    }
+
+    private Buff GetRndBuff()
+    {
+        float rnd = Random.value;
+        if (rnd < 0.7f)
+        {
+            int type = Random.Range(0, 2);
+            switch (type)
+            {
+                default:
+                case 0:
+                    return new DoubleDamageBuff();
+                case 1:
+                    return new ExpandedBuff();
+                case 2:
+                    return new OneShootBuff();
+                case 3:
+                    return new SlowSpeedBuff();
+            }
+        }
+        else
+        {
+            return new EmptyBuff();
         }
     }
 }
