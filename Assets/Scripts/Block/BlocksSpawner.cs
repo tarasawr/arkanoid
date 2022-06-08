@@ -4,8 +4,8 @@ using UnityEngine;
 public class BlocksSpawner : MonoBehaviour
 {
     public GameObject prefabBlock;
-    public float _maxColumn;
-    public float _maxRow;
+    public int _maxColumn;
+    public int _maxRow;
 
     private Vector3 _startSpawnPosition;
     private float _blockHeigth;
@@ -31,7 +31,7 @@ public class BlocksSpawner : MonoBehaviour
                 _currentPosition.x = go.transform.localPosition.x + _blockWeigth + _offsetX;
 
                 Block block = go.GetComponent<Block>();
-                block.Line = x;
+                block.SetData(_maxRow,x);
                 blocksList.Add(block);
             }
 

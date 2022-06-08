@@ -5,14 +5,15 @@ using Random = UnityEngine.Random;
 public class BuffSpawner : MonoBehaviour
 {
     public Gameplayer Gameplayer;
-    
-    [Range(0, 1)] 
-    public float Chance;
+    public Platform Platform;
+
+    [Range(0, 1)] public float Chance;
 
     public GameObject BuffPref;
 
     public void Spawn(Transform trnsf)
     {
+        Gameplayer.PauseManager.Register(Platform);
         float rnd = Random.value;
         if (rnd <= Chance)
         {
@@ -20,6 +21,7 @@ public class BuffSpawner : MonoBehaviour
             //Debug.Log(go.name);
             BuffPref buffPref = go.GetComponent<BuffPref>();
             buffPref.SetBuff(GetRndBuff());
+            Gameplayer.PauseManager.Register(buffPref);
         }
     }
 
@@ -27,10 +29,9 @@ public class BuffSpawner : MonoBehaviour
     {
         string[] enums = Enum.GetNames(typeof(TypeBuffEnum));
         string rnd = enums[Random.Range(0, enums.Length)];
-        
+
         Ball ball = Gameplayer.GetPlayer();
-        Platform platform = Gameplayer.GetPlatform();
-        
+
         switch (rnd)
         {
             case nameof(TypeBuffEnum.ONE_SHOT):
@@ -40,7 +41,7 @@ public class BuffSpawner : MonoBehaviour
             case nameof(TypeBuffEnum.DOUBLE_DAMAGE):
                 return new DoubleDamageBuff(ball);
             case nameof(TypeBuffEnum.EXPANDED):
-                return new ExpandedBuff(platform);
+                return new ExpandedBuff(Platform);
             default:
                 Debug.Log("Enum is not finded " + rnd);
                 return new EmptyBuff();

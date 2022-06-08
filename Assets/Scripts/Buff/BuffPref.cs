@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class BuffPref : MonoBehaviour
+public class BuffPref : MonoBehaviour, IPauseHandler
 {
     public Sprite Icon
     {
@@ -14,6 +14,7 @@ public class BuffPref : MonoBehaviour
 
     private float _speed = 1f;
     private IBuff _buff;
+    private bool _isPause;
 
     private SpriteRenderer _sp;
 
@@ -34,6 +35,13 @@ public class BuffPref : MonoBehaviour
 
     private void Update()
     {
+        if (_isPause) return;
+
         transform.position += Vector3.down * (_speed * Time.deltaTime);
+    }
+
+    public void SetPaused(bool isPaused)
+    {
+        _isPause = !isPaused;
     }
 }

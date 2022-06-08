@@ -2,71 +2,50 @@ using System;
 using System.Collections;
 using UnityEngine;
 
-public class Platform : MonoBehaviour
+public class Platform : MonoBehaviour, IPauseHandler
 {
     public Gameplayer Gameplayer;
-    public Transform rightLimitPosition;
-    public Transform leftLimitPosition;
-
     public bool IsHaveBuff;
 
     public float Width
     {
-        set
-        {
-            transform.localScale = new Vector3(value,transform.localScale.y);
-        }
+        set { transform.localScale = new Vector3(value, transform.localScale.y); }
         get { return transform.localScale.x; }
     }
 
-    private float Velocity = 15f;
-    private float _rightLimit;
-    private float _leftLimit;
-    private float _lengthPlatform;
-    private float _currDiff = 0f;
-
-    private void Start()
-    {
-        _rightLimit = rightLimitPosition.position.x;
-        _leftLimit = leftLimitPosition.position.x;
-        _lengthPlatform = Mathf.Abs(transform.localScale.x);
-    }
+    private float _velocity = 13f;
+    private float _boundary = 2.15f;
+    private bool _isMovable = true;
 
     private void Update()
     {
+        if (!_isMovable) return;
+
         if (Input.GetAxis("Horizontal") != 0)
             Move(Input.GetAxis("Horizontal"));
-
-        if (Input.touches.Length > 0)
-            if (Input.touches[0].phase == TouchPhase.Moved)
-            {
-                Vector2 swipeDelta = Input.touches[0].position;
-                MoveOnMobile(swipeDelta);
-            }
     }
 
     private void Move(float swipeDelta)
     {
-        transform.Translate(Vector3.right * Velocity * swipeDelta * Time.deltaTime);
-        transform.position =
-            new Vector3(
-                Mathf.Clamp(transform.position.x, _leftLimit + _lengthPlatform / 2, _rightLimit - _lengthPlatform / 2),
-                transform.position.y, transform.position.z);
-    }
+        transform.Translate(Vector3.right * _velocity * swipeDelta * Time.deltaTime);
 
-    private void MoveOnMobile(Vector2 swipeDelta)
-    {
-        float weightRoad = Mathf.Abs(_rightLimit - _lengthPlatform / 2) + Mathf.Abs(_leftLimit + _lengthPlatform / 2);
-        float Position = (swipeDelta.x / Screen.width) * weightRoad - weightRoad / 2;
-        _currDiff = Mathf.MoveTowards(_currDiff, Position, Velocity * Time.deltaTime);
-        transform.position = new Vector3(_currDiff, transform.position.y, transform.position.z);
+        if (transform.position.x < -_boundary)
+        {
+            transform.position = new Vector2(-_boundary, transform.position.y);
+        }
+
+        if (transform.position.x > _boundary)
+        {
+            transform.position = new Vector2(_boundary, transform.position.y);
+        }
     }
 
     private void OnTriggerEnter2D(Collider2D other)
     {
         if (other.TryGetComponent(out BuffPref buff))
         {
-            Gameplayer.ActivateBuff(buff.GetBuff());
+            buff.GetBuff().Apply();
+            Gameplayer.PauseManager.Unregister(buff);
             Destroy(other.gameObject);
         }
     }
@@ -81,5 +60,10 @@ public class Platform : MonoBehaviour
         yield return new WaitForSeconds(time);
         action?.Invoke();
         IsHaveBuff = false;
+    }
+
+    public void SetPaused(bool isPaused)
+    {
+        _isMovable = !isPaused;
     }
 }

@@ -3,40 +3,28 @@ using System.Collections;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
-public class Ball : MonoBehaviour
+public class Ball : MonoBehaviour, IPauseHandler
 {
     public float Speed
     {
-        set
-        {
-            _speed = value;
-        }
-        get
-        {
-            return _speed;
-        }
+        set { _speed = value; }
+        get { return _speed; }
     }
+
     public int Damage
     {
-        set
-        {
-            _damageQty = value;
-        }
-        get
-        {
-            return _damageQty;
-        }
+        set { _damageQty = value; }
+        get { return _damageQty; }
     }
 
     public bool IsHaveBuff;
-    
+
     private Rigidbody2D _rb;
     private int _damageQty = 1;
-
     private float _minSpeed = 3f;
     private float _speed = 30f;
-
     private bool _isMovabl;
+    private bool _isPause;
 
     private void Start()
     {
@@ -45,11 +33,8 @@ public class Ball : MonoBehaviour
 
     private void Push()
     {
-        if (!_isMovabl)
-        {
-            _rb.velocity = new Vector2(Random.Range(_minSpeed, _speed + 1), _speed);
-            _isMovabl = true;
-        }
+        _isMovabl = true;
+        _rb.velocity = new Vector2(Random.Range(_minSpeed, _speed + 1), _speed);
     }
 
     private void OnCollisionEnter2D(Collision2D collision)
@@ -94,17 +79,25 @@ public class Ball : MonoBehaviour
 
     private void Update()
     {
+        if (_isPause) return;
+
         if (Input.GetKey(KeyCode.Space))
             Push();
 
-        if (Input.touches.Length > 0)
-            if (Input.touches[0].phase == TouchPhase.Moved)
-                Push();
 
         if (_isMovabl)
             if (_rb.velocity.y < _speed && _rb.velocity.y >= 0)
                 _rb.velocity = new Vector2(_rb.velocity.x, _speed);
             else if (_rb.velocity.y < 0 && _rb.velocity.y >= -_speed)
                 _rb.velocity = new Vector2(_rb.velocity.x, -_speed);
+    }
+
+    public void SetPaused(bool isPaused)
+    {
+        _isPause = isPaused;
+        if (isPaused)
+            _rb.velocity = Vector2.zero;
+        else
+            _rb.velocity = new Vector2(Random.Range(_minSpeed, _speed + 1), _speed);
     }
 }

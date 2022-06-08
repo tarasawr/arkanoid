@@ -28,4 +28,9 @@ public class HealthColor : MonoBehaviour
     {
         _sprite.color = _gradient.Evaluate(percent);
     }
+
+    public void SetColorByLine(int maxLine,int line)
+    {
+        _sprite.color = _gradient.Evaluate((float)line/maxLine);
+    }
 }
