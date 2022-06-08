@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
@@ -7,22 +8,43 @@ public class BuffSpawner : MonoBehaviour
     public Gameplayer Gameplayer;
     public Platform Platform;
 
-    [Range(0, 1)] public float Chance;
+    [Range(0, 1)] 
+    public float Chance;
 
     public GameObject BuffPref;
+    private List<BuffPref> _buffPrefsList = new List<BuffPref>();
 
     public void Spawn(Transform trnsf)
     {
         Gameplayer.PauseManager.Register(Platform);
-        float rnd = Random.value;
-        if (rnd <= Chance)
+
+        if (Random.value <= Chance)
         {
             GameObject go = Instantiate(BuffPref, trnsf.position, Quaternion.identity);
-            //Debug.Log(go.name);
+
             BuffPref buffPref = go.GetComponent<BuffPref>();
             buffPref.SetBuff(GetRndBuff());
             Gameplayer.PauseManager.Register(buffPref);
+            _buffPrefsList.Add(buffPref);
         }
+    }
+
+    public void DestroyBuff(BuffPref buffPref)
+    {
+        Gameplayer.PauseManager.Unregister(buffPref);
+        _buffPrefsList.Remove(buffPref);
+        Destroy(buffPref.gameObject);
+    }
+
+    public void Clear()
+    {
+        foreach (BuffPref buffPref in _buffPrefsList)
+        {
+            Gameplayer.PauseManager.Unregister(buffPref);
+            Destroy(buffPref.gameObject);
+        }
+
+        _buffPrefsList.Clear();
     }
 
     private IBuff GetRndBuff()

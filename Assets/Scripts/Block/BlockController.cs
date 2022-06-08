@@ -21,6 +21,7 @@ public class BlockController : MonoBehaviour
     {
         BuffSpawner.Spawn(block.transform);
         _blocksList.Remove(block);
+        Gameplayer.UpdateScore(block.Score);
         Destroy(block.gameObject);
         CheckFinish();
     }
@@ -36,6 +37,6 @@ public class BlockController : MonoBehaviour
     private void CheckFinish()
     {
         if (_blocksList.Count <= 0)
-            Gameplayer.FinishGame();
+            Gameplayer.FinishGame(true);
     }
 }

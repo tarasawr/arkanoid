@@ -5,6 +5,8 @@ using UnityEngine;
 public class Platform : MonoBehaviour, IPauseHandler
 {
     public Gameplayer Gameplayer;
+    private BuffSpawner buffSpawner => Gameplayer.BuffSpawner;
+    
     public bool IsHaveBuff;
 
     public float Width
@@ -30,14 +32,10 @@ public class Platform : MonoBehaviour, IPauseHandler
         transform.Translate(Vector3.right * _velocity * swipeDelta * Time.deltaTime);
 
         if (transform.position.x < -_boundary)
-        {
             transform.position = new Vector2(-_boundary, transform.position.y);
-        }
 
         if (transform.position.x > _boundary)
-        {
             transform.position = new Vector2(_boundary, transform.position.y);
-        }
     }
 
     private void OnTriggerEnter2D(Collider2D other)
@@ -45,8 +43,7 @@ public class Platform : MonoBehaviour, IPauseHandler
         if (other.TryGetComponent(out BuffPref buff))
         {
             buff.GetBuff().Apply();
-            Gameplayer.PauseManager.Unregister(buff);
-            Destroy(other.gameObject);
+            buffSpawner.DestroyBuff(buff);
         }
     }
 

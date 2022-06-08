@@ -42,6 +42,6 @@ public class BuffPref : MonoBehaviour, IPauseHandler
 
     public void SetPaused(bool isPaused)
     {
-        _isPause = !isPaused;
+        _isPause = isPaused;
     }
 }

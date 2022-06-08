@@ -23,6 +23,16 @@ public class BallController : MonoBehaviour
 
     public void Reset()
     {
-        _player.transform.position = PossSpawn.position;
+        if (_player == null) return;
+
+        Gameplayer.PauseManager.Unregister(_player);
+        Destroy(_player.gameObject);
+    }
+
+    public void Respawn()
+    {
+        Gameplayer.PauseManager.Unregister(_player);
+        Destroy(_player.gameObject);
+        Spawn();
     }
 }

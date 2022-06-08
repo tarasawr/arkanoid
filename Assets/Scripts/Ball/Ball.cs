@@ -22,8 +22,8 @@ public class Ball : MonoBehaviour, IPauseHandler
     private Rigidbody2D _rb;
     private int _damageQty = 1;
     private float _minSpeed = 3f;
-    private float _speed = 30f;
-    private bool _isMovabl;
+    private float _speed = 10f;
+    private bool _isMovable;
     private bool _isPause;
 
     private void Start()
@@ -33,7 +33,7 @@ public class Ball : MonoBehaviour, IPauseHandler
 
     private void Push()
     {
-        _isMovabl = true;
+        _isMovable = true;
         _rb.velocity = new Vector2(Random.Range(_minSpeed, _speed + 1), _speed);
     }
 
@@ -46,7 +46,6 @@ public class Ball : MonoBehaviour, IPauseHandler
                 Vector2 point = hit.point;
                 //Instantiate(hitEffect, new Vector3(point.x, point.y, 0), Quaternion.identity);
             }
-
             //SH.PlaySound(1);
             damage.TakeDamage(_damageQty);
         }
@@ -81,11 +80,10 @@ public class Ball : MonoBehaviour, IPauseHandler
     {
         if (_isPause) return;
 
-        if (Input.GetKey(KeyCode.Space))
+        if (Input.GetKey(KeyCode.Space) && !_isMovable)
             Push();
-
-
-        if (_isMovabl)
+        
+        if (_isMovable)
             if (_rb.velocity.y < _speed && _rb.velocity.y >= 0)
                 _rb.velocity = new Vector2(_rb.velocity.x, _speed);
             else if (_rb.velocity.y < 0 && _rb.velocity.y >= -_speed)
@@ -95,9 +93,12 @@ public class Ball : MonoBehaviour, IPauseHandler
     public void SetPaused(bool isPaused)
     {
         _isPause = isPaused;
+
+        if (!_isMovable)return;
+      
         if (isPaused)
             _rb.velocity = Vector2.zero;
-        else
-            _rb.velocity = new Vector2(Random.Range(_minSpeed, _speed + 1), _speed);
+        else 
+            Push();
     }
 }
