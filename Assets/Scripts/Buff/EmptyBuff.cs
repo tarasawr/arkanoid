@@ -1,9 +1,7 @@
 ﻿using UnityEngine;
 
-public class EmptyBuff : Buff
+public class EmptyBuff : IBuff
 {
-    public override void Apply()
-    {
-        Debug.Log("Empty");
-    }
+    public  void Apply() { Debug.Log("Empty"); }
+    public void Cancel() { }
 }
