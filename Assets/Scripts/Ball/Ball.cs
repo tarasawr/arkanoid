@@ -22,7 +22,7 @@ public class Ball : MonoBehaviour, IPauseHandler
     private Rigidbody2D _rb;
     private int _damageQty = 1;
     private float _minSpeed = 3f;
-    private float _speed = 10f;
+    private float _speed = 7f;
     private bool _isMovable;
     private bool _isPause;
 

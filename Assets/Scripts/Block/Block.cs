@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using Papae.UnitySDK.Managers;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
@@ -43,13 +44,13 @@ namespace Block
         {
             _maxHealth = data.MaxHealth;
             _line = data.CurrentLine;
-             Score = data.Score;
+            Score = data.Score;
             _spriteNameBrocken = data.SpriteNameBrocken;
             _spriteNameFull = data.SpriteNameFull;
-            
+
             _health = _maxHealth;
 
-            Load();
+            StartCoroutine(Load());
         }
 
         public void TakeDamage(int damageQty)
@@ -67,16 +68,21 @@ namespace Block
                 DeadAction?.Invoke(this);
         }
 
-        private void  Load()
+        private IEnumerator Load()
         {
-            AsyncOperationHandle<Sprite> full = Addressables.LoadAsset<Sprite>(_spriteNameFull);
-            AsyncOperationHandle<Sprite> brocken = Addressables.LoadAsset<Sprite>(_spriteNameBrocken);
-            AsyncOperationHandle<AudioClip> touchClip = Addressables.LoadAsset<AudioClip>("clip" + _line);
+            AsyncOperationHandle<Sprite> full = Addressables.LoadAssetAsync<Sprite>(_spriteNameFull);
             full.Completed += SpriteFull;
+            yield return full;
+            
+            AsyncOperationHandle<Sprite> brocken = Addressables.LoadAssetAsync<Sprite>(_spriteNameBrocken);
             brocken.Completed += SpriteBrocken;
-            touchClip.Completed += AudioClip;
+            yield return brocken;
+            
+            AsyncOperationHandle<AudioClip> touchClip = Addressables.LoadAssetAsync<AudioClip>("clip" + _line);
+            touchClip.Completed += AudioClip; 
+            yield return touchClip;
         }
-        
+
         private void SpriteFull(AsyncOperationHandle<Sprite> handle)
         {
             if (handle.Status == AsyncOperationStatus.Succeeded)
@@ -95,6 +101,16 @@ namespace Block
         {
             if (handle.Status == AsyncOperationStatus.Succeeded)
                 _touchClip = handle.Result;
+        }
+
+        void OnDestroy()
+        {
+            if (_touchClip != null)
+                Addressables.Release(_touchClip);
+            if (_brocken != null)
+                Addressables.Release(_brocken);
+            if (_full != null)
+                Addressables.Release(_full);
         }
     }
 }

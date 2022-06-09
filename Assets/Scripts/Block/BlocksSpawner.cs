@@ -43,7 +43,8 @@ namespace Block
                     });
                     blocksList.Add(block);
                 }
-                _currentPosition.y -= _offsetY + _blockHeigth;
+
+                _currentPosition.y += _offsetY + _blockHeigth;
             }
         }
 
@@ -56,10 +57,12 @@ namespace Block
 
         private void CalculatePointForParentCenter()
         {
-            float mainDistance = MaxColumn * _blockWeigth + (MaxColumn - 1) * _offsetX - 2 * _blockWeigth / 2;
+            float mainDistanceX = MaxColumn * _blockWeigth + (MaxColumn - 1) * _offsetX - 2 * _blockWeigth / 2;
 
-            _startSpawnPosition.x = -mainDistance / 2;
-            _startSpawnPosition.y = transform.position.y - _blockHeigth / 2;
+            float mainDistanceY = MaxLine * _blockHeigth + (MaxLine - 1) * _offsetY - 2 * _blockHeigth / 2;
+            
+            _startSpawnPosition.x = -mainDistanceX / 2;
+            _startSpawnPosition.y = mainDistanceY;
 
             _currentPosition = _startSpawnPosition;
         }

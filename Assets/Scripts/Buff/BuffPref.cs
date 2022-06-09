@@ -1,4 +1,4 @@
-using System;
+using System.Collections;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 using UnityEngine.ResourceManagement.AsyncOperations;
@@ -10,16 +10,17 @@ public class BuffPref : MonoBehaviour, IPauseHandler
     private bool _isPause;
 
     private SpriteRenderer _sp;
+    private Sprite _icon;
 
     void Start()
     {
         _sp = GetComponent<SpriteRenderer>();
     }
 
-    public void SetBuff(IBuff buff,string type)
+    public void SetBuff(IBuff buff, string type)
     {
         _buff = buff;
-        Load(type);
+        StartCoroutine(Load(type));
     }
 
     public IBuff GetBuff()
@@ -39,15 +40,22 @@ public class BuffPref : MonoBehaviour, IPauseHandler
         _isPause = isPaused;
     }
 
-    private void Load(string type)
+    private IEnumerator Load(string type)
     {
-        AsyncOperationHandle<Sprite> icon = Addressables.LoadAsset<Sprite>(type);
+        AsyncOperationHandle<Sprite> icon = Addressables.LoadAssetAsync<Sprite>(type);
+        yield return icon;
         icon.Completed += Icon;
     }
 
     private void Icon(AsyncOperationHandle<Sprite> handle)
     {
         if (handle.Status == AsyncOperationStatus.Succeeded)
-            _sp.sprite = handle.Result;
+            _sp.sprite = _icon = handle.Result;
+    }
+
+    void OnDestroy()
+    {
+        if (_icon != null)
+            Addressables.Release(_icon);
     }
 }
