@@ -1,36 +1,36 @@
 using UnityEngine;
 
-public class HealthColor : MonoBehaviour
+namespace Block
 {
-    private SpriteRenderer _sprite => GetComponent<SpriteRenderer>();
-    private Gradient _gradient;
-
-    private void Awake()
+    public class HealthColor : MonoBehaviour
     {
-        _gradient = new Gradient();
+        private SpriteRenderer _sprite;
+        private Gradient _gradient;
 
-        GradientColorKey[] colorKey = new GradientColorKey[2];
-        colorKey[0].color = Color.red;
-        colorKey[0].time = 0.0f;
-        colorKey[1].color = _sprite.color;
-        colorKey[1].time = 1.0f;
+        private void Awake()
+        {
+            _sprite = GetComponent<SpriteRenderer>();
+            _gradient = new Gradient();
 
-        GradientAlphaKey[] alphaKey = new GradientAlphaKey[2];
-        alphaKey[0].alpha = 1.0f;
-        alphaKey[0].time = 1.0f;
-        alphaKey[1].alpha = 1.0f;
-        alphaKey[1].time = 0.0f;
+            GradientColorKey[] colorKey = new GradientColorKey[2];
+            var color = _sprite.color;
+            colorKey[0].color = color;
+            colorKey[0].time = 1.0f;
+            colorKey[1].color = color;
+            colorKey[1].time = 1.0f;
 
-        _gradient.SetKeys(colorKey, alphaKey);
-    }
+            GradientAlphaKey[] alphaKey = new GradientAlphaKey[2];
+            alphaKey[0].alpha = 1.0f;
+            alphaKey[0].time = 1.0f;
+            alphaKey[1].alpha = 0.2f;
+            alphaKey[1].time = 0.0f;
 
-    public void Сhange(float percent)
-    {
-        _sprite.color = _gradient.Evaluate(percent);
-    }
+            _gradient.SetKeys(colorKey, alphaKey);
+        }
 
-    public void SetColorByLine(int maxLine,int line)
-    {
-        _sprite.color = _gradient.Evaluate((float)line/maxLine);
+        public void Сhange(float percent)
+        {
+            _sprite.color = _gradient.Evaluate(percent);
+        }
     }
 }

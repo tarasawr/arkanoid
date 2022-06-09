@@ -47,16 +47,18 @@ public class View : MonoBehaviour
     public void ShowFinish(bool isWin)
     {
         WinPanel.SetActive(true);
-        
+
         string tmp = default;
         if (isWin)
-            tmp = "Krasavchic, your score " + _score + "\n Common score " +
-                  SaveSystem.GetInstance().Data.Score;
+            tmp = "Krasavchic, your score " + _score
+                                            + "\n Common score "
+                                            + SaveSystem.GetInstance().Data.Score;
         else
-            tmp = "LoL, your score " + _score + "\n Common score " +
-                  SaveSystem.GetInstance().Data.Score;
+            tmp = "LoL, your score " + _score
+                                     + "\n Common score "
+                                     + SaveSystem.GetInstance().Data.Score;
         FinishInfoText.text = tmp;
-        
+
         SaveSystem.GetInstance().Data.Score += _score;
         _score = 0;
         UpdateScoreUi();

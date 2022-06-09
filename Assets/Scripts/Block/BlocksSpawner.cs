@@ -1,58 +1,67 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class BlocksSpawner : MonoBehaviour
+namespace Block
 {
-    public GameObject prefabBlock;
-    public int _maxColumn;
-    public int _maxRow;
-
-    private Vector3 _startSpawnPosition;
-    private float _blockHeigth;
-    private float _blockWeigth;
-
-    [SerializeField]private float _offsetX;
-    [SerializeField]private float _offsetY;
-    
-    private Vector3 _currentPosition;
-
-    public void SpawnBlocks(ref List<Block> blocksList)
+    public class BlocksSpawner : MonoBehaviour
     {
-        CalculateSizeImagePrefab();
-        CalculatePointForParentCenter();
-        for (int x = 0; x < _maxRow; x++)
+        public GameObject prefabBlock;
+        public int _maxColumn;
+        public int _maxLine;
+
+        private Vector3 _startSpawnPosition;
+        private float _blockHeigth;
+        private float _blockWeigth;
+
+        [SerializeField] private float _offsetX;
+        [SerializeField] private float _offsetY;
+
+        private Vector3 _currentPosition;
+
+        public void SpawnBlocks(ref List<Block> blocksList)
         {
-            _currentPosition.x = _startSpawnPosition.x;
-            for (int y = 0; y < _maxColumn; y++)
+            CalculateSizeImagePrefab();
+            CalculatePointForParentCenter();
+            for (int x = 0; x < _maxLine; x++)
             {
-                GameObject go = Instantiate(prefabBlock.gameObject, _currentPosition,
-                    Quaternion.identity, transform);
-                go.name = x.ToString();
-                _currentPosition.x = go.transform.localPosition.x + _blockWeigth + _offsetX;
+                _currentPosition.x = _startSpawnPosition.x;
+                for (int y = 0; y < _maxColumn; y++)
+                {
+                    GameObject go = Instantiate(prefabBlock.gameObject, _currentPosition,
+                        Quaternion.identity, transform);
+                    go.name = x.ToString();
+                    _currentPosition.x = go.transform.localPosition.x + _blockWeigth + _offsetX;
 
-                Block block = go.GetComponent<Block>();
-                block.SetData(_maxRow,x);
-                blocksList.Add(block);
+                    Block block = go.GetComponent<Block>();
+                    block.SetData(new Data
+                    {
+                        MaxHealth = x,
+                        Score = x,
+                        CurrentLine = x,
+                        SpriteNameBrocken = x+"brocken",
+                        SpriteNameFull = x+"full",
+                    });
+                    blocksList.Add(block);
+                }
+                _currentPosition.y -= _offsetY + _blockHeigth;
             }
-
-            _currentPosition.y -= _offsetY + _blockHeigth;
         }
-    }
 
-    private void CalculateSizeImagePrefab()
-    {
-        var localScale = prefabBlock.transform.localScale;
-        _blockHeigth = prefabBlock.GetComponent<SpriteRenderer>().size.y * localScale.y;
-        _blockWeigth = prefabBlock.GetComponent<SpriteRenderer>().size.x * localScale.x;
-    }
+        private void CalculateSizeImagePrefab()
+        {
+            var localScale = prefabBlock.transform.localScale;
+            _blockHeigth = prefabBlock.GetComponent<SpriteRenderer>().size.y * localScale.y;
+            _blockWeigth = prefabBlock.GetComponent<SpriteRenderer>().size.x * localScale.x;
+        }
 
-    private void CalculatePointForParentCenter()
-    {
-        float mainDistance = _maxColumn * _blockWeigth + (_maxColumn - 1) * _offsetX - 2 * _blockWeigth / 2;
+        private void CalculatePointForParentCenter()
+        {
+            float mainDistance = _maxColumn * _blockWeigth + (_maxColumn - 1) * _offsetX - 2 * _blockWeigth / 2;
 
-        _startSpawnPosition.x = -mainDistance / 2;
-        _startSpawnPosition.y = transform.position.y - _blockHeigth / 2;
+            _startSpawnPosition.x = -mainDistance / 2;
+            _startSpawnPosition.y = transform.position.y - _blockHeigth / 2;
 
-        _currentPosition = _startSpawnPosition;
+            _currentPosition = _startSpawnPosition;
+        }
     }
 }

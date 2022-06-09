@@ -46,7 +46,7 @@ public class Ball : MonoBehaviour, IPauseHandler
                 Vector2 point = hit.point;
                 //Instantiate(hitEffect, new Vector3(point.x, point.y, 0), Quaternion.identity);
             }
-            //SH.PlaySound(1);
+          
             damage.TakeDamage(_damageQty);
         }
 

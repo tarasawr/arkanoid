@@ -26,6 +26,5 @@ public class SlowSpeedBuff : IBuff
     public void Cancel()
     {
         _ball.Speed = _oldValue;
-        Debug.Log("Cancel buff " + Type);
     }
 }
