@@ -8,8 +8,7 @@ public class BuffSpawner : MonoBehaviour
     public Gameplayer Gameplayer;
     public Platform Platform;
 
-    [Range(0, 1)] 
-    public float Chance;
+    [Range(0, 1)] public float Chance;
 
     public GameObject BuffPref;
     private List<BuffPref> _buffPrefsList = new List<BuffPref>();
@@ -23,7 +22,10 @@ public class BuffSpawner : MonoBehaviour
             GameObject go = Instantiate(BuffPref, trnsf.position, Quaternion.identity);
 
             BuffPref buffPref = go.GetComponent<BuffPref>();
-            buffPref.SetBuff(GetRndBuff());
+            string[] enums = Enum.GetNames(typeof(TypeBuffEnum));
+            string type = enums[Random.Range(0, enums.Length)];
+            IBuff buff = GetRndBuff(type);
+            buffPref.SetBuff(buff, type);
             Gameplayer.PauseManager.Register(buffPref);
             _buffPrefsList.Add(buffPref);
         }
@@ -47,14 +49,11 @@ public class BuffSpawner : MonoBehaviour
         _buffPrefsList.Clear();
     }
 
-    private IBuff GetRndBuff()
+    private IBuff GetRndBuff(string type)
     {
-        string[] enums = Enum.GetNames(typeof(TypeBuffEnum));
-        string rnd = enums[Random.Range(0, enums.Length)];
-
         Ball ball = Gameplayer.GetPlayer();
 
-        switch (rnd)
+        switch (type)
         {
             case nameof(TypeBuffEnum.ONE_SHOT):
                 return new OneShootBuff(ball);
@@ -65,7 +64,7 @@ public class BuffSpawner : MonoBehaviour
             case nameof(TypeBuffEnum.EXPANDED):
                 return new ExpandedBuff(Platform);
             default:
-                Debug.Log("Enum is not finded " + rnd);
+                Debug.Log("Enum is not finded " + type);
                 return new EmptyBuff();
         }
     }

@@ -81,6 +81,22 @@ MonoBehaviour:
     m_Address: clip1
     m_ReadOnly: 0
     m_SerializedLabels: []
+  - m_GUID: cafac52e13d37494a8d858179559a19f
+    m_Address: DOUBLE_DAMAGE
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+  - m_GUID: a99deaf7fa55f384eacf7b8c709f7211
+    m_Address: EXPANDED
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+  - m_GUID: c7c772459c07bb54eabf36e3005c3115
+    m_Address: ONE_SHOT
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+  - m_GUID: f66845f09ceefd24689039510501971b
+    m_Address: SLOW_SPEED
+    m_ReadOnly: 0
+    m_SerializedLabels: []
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: 6974da59167ad534aa1d22481b52d185, type: 2}
   m_SchemaSet:

@@ -29,6 +29,5 @@ public class ExpandedBuff : IBuff
     public void Cancel()
     {
         _platform.Width = _oldValue;
-        Debug.Log("Cancel buff " + Type);
     }
 }
