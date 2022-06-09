@@ -40,28 +40,7 @@ public class Ball : MonoBehaviour, IPauseHandler
     private void OnCollisionEnter2D(Collision2D collision)
     {
         if (collision.collider.TryGetComponent(out IDamage damage))
-        {
-            foreach (ContactPoint2D hit in collision.contacts)
-            {
-                Vector2 point = hit.point;
-                //Instantiate(hitEffect, new Vector3(point.x, point.y, 0), Quaternion.identity);
-            }
-          
             damage.TakeDamage(_damageQty);
-        }
-
-        if (collision.collider.TryGetComponent(out Platform platform))
-        {
-            float PointX = 0;
-            float forceX = 0;
-            foreach (ContactPoint2D hit in collision.contacts)
-            {
-                PointX = (hit.point.x - platform.transform.position.x) / (platform.transform.localScale.x / 2);
-                forceX = (PointX > 0) ? Mathf.Clamp(PointX, 0, 1) : Mathf.Clamp(PointX, -1, 0);
-            }
-
-            _rb.velocity = new Vector2(forceX * _speed, _speed);
-        }
     }
 
     public void CancelEffectByTime(Action action, float time)
@@ -82,7 +61,7 @@ public class Ball : MonoBehaviour, IPauseHandler
 
         if (Input.GetKey(KeyCode.Space) && !_isMovable)
             Push();
-        
+
         if (_isMovable)
             if (_rb.velocity.y < _speed && _rb.velocity.y >= 0)
                 _rb.velocity = new Vector2(_rb.velocity.x, _speed);
@@ -94,11 +73,11 @@ public class Ball : MonoBehaviour, IPauseHandler
     {
         _isPause = isPaused;
 
-        if (!_isMovable)return;
-      
+        if (!_isMovable) return;
+
         if (isPaused)
             _rb.velocity = Vector2.zero;
-        else 
+        else
             Push();
     }
 }

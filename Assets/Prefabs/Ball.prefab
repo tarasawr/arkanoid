@@ -137,6 +137,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6e31be7000e5bda409d910be78a1b15d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  IsHaveBuff: 0
 --- !u!96 &3659614271779445325
 TrailRenderer:
   serializedVersion: 2
@@ -179,7 +180,7 @@ TrailRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Time: 1
+  m_Time: 0.15
   m_Parameters:
     serializedVersion: 3
     widthMultiplier: 1
@@ -187,8 +188,8 @@ TrailRenderer:
       serializedVersion: 2
       m_Curve:
       - serializedVersion: 3
-        time: 0
-        value: 0.25
+        time: 0.028339386
+        value: 0.42308044
         inSlope: 0
         outSlope: 0
         tangentMode: 0
@@ -196,8 +197,17 @@ TrailRenderer:
         inWeight: 0.33333334
         outWeight: 0.33333334
       - serializedVersion: 3
+        time: 0.5852629
+        value: 0.13500094
+        inSlope: -0.73484045
+        outSlope: -0.73484045
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0.33333334
+        outWeight: 0.33333334
+      - serializedVersion: 3
         time: 0.81589955
-        value: 0
+        value: 0.038467407
         inSlope: 0
         outSlope: 0
         tangentMode: 0
@@ -209,16 +219,16 @@ TrailRenderer:
       m_RotationOrder: 4
     colorGradient:
       serializedVersion: 2
-      key0: {r: 0.006897471, g: 0.2497837, b: 0.2924528, a: 1}
-      key1: {r: 0.22465946, g: 0.8885615, b: 1, a: 1}
+      key0: {r: 0.77254903, g: 0.77254075, b: 0.39607844, a: 1}
+      key1: {r: 1, g: 0.16489802, b: 0.042452812, a: 1}
       key2: {r: 1, g: 1, b: 1, a: 0}
       key3: {r: 0, g: 0, b: 0, a: 0}
       key4: {r: 0, g: 0, b: 0, a: 0}
       key5: {r: 0, g: 0, b: 0, a: 0}
       key6: {r: 0, g: 0, b: 0, a: 0}
       key7: {r: 0, g: 0, b: 0, a: 0}
-      ctime0: 13107
-      ctime1: 37779
+      ctime0: 0
+      ctime1: 65535
       ctime2: 62066
       ctime3: 0
       ctime4: 0
@@ -234,7 +244,7 @@ TrailRenderer:
       atime6: 0
       atime7: 0
       m_Mode: 0
-      m_NumColorKeys: 3
+      m_NumColorKeys: 2
       m_NumAlphaKeys: 2
     numCornerVertices: 0
     numCapVertices: 0

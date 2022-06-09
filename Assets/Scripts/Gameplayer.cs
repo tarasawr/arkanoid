@@ -15,8 +15,7 @@ public class Gameplayer : MonoBehaviour
     private void Start()
     {
         PauseManager = new PauseManager();
-        //SaveSystem.GetInstance().LoadData();
-        View.ShowToast("Press 'Space' to start \n Your old Score "+SaveSystem.GetInstance().Data.Score);
+        View.ShowToast("Press 'Space' to start \n Your old Score " + SaveSystem.GetInstance().Data.Score);
         Play();
     }
 

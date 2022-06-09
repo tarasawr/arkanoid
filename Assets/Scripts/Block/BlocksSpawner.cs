@@ -6,15 +6,15 @@ namespace Block
     public class BlocksSpawner : MonoBehaviour
     {
         public GameObject prefabBlock;
-        public int _maxColumn;
-        public int _maxLine;
+        public int MaxColumn;
+        public int MaxLine;
+
+        [SerializeField] private float _offsetX;
+        [SerializeField] private float _offsetY;
 
         private Vector3 _startSpawnPosition;
         private float _blockHeigth;
         private float _blockWeigth;
-
-        [SerializeField] private float _offsetX;
-        [SerializeField] private float _offsetY;
 
         private Vector3 _currentPosition;
 
@@ -22,10 +22,10 @@ namespace Block
         {
             CalculateSizeImagePrefab();
             CalculatePointForParentCenter();
-            for (int x = 0; x < _maxLine; x++)
+            for (int x = 0; x < MaxLine; x++)
             {
                 _currentPosition.x = _startSpawnPosition.x;
-                for (int y = 0; y < _maxColumn; y++)
+                for (int y = 0; y < MaxColumn; y++)
                 {
                     GameObject go = Instantiate(prefabBlock.gameObject, _currentPosition,
                         Quaternion.identity, transform);
@@ -38,8 +38,8 @@ namespace Block
                         MaxHealth = x,
                         Score = x,
                         CurrentLine = x,
-                        SpriteNameBrocken = x+"brocken",
-                        SpriteNameFull = x+"full",
+                        SpriteNameBrocken = x + "brocken",
+                        SpriteNameFull = x + "full",
                     });
                     blocksList.Add(block);
                 }
@@ -56,7 +56,7 @@ namespace Block
 
         private void CalculatePointForParentCenter()
         {
-            float mainDistance = _maxColumn * _blockWeigth + (_maxColumn - 1) * _offsetX - 2 * _blockWeigth / 2;
+            float mainDistance = MaxColumn * _blockWeigth + (MaxColumn - 1) * _offsetX - 2 * _blockWeigth / 2;
 
             _startSpawnPosition.x = -mainDistance / 2;
             _startSpawnPosition.y = transform.position.y - _blockHeigth / 2;
