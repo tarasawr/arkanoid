@@ -61,7 +61,7 @@ namespace Block
 
             _healthColor.Сhange(percent);
 
-            if (percent < 0.5f)
+            if (percent <= 0.5f)
                 _spriteRenderer.sprite = _brocken;
 
             if (_health <= 0)

@@ -1,4 +1,5 @@
 using Block;
+using Papae.UnitySDK.Managers;
 using UnityEngine;
 
 public class Gameplayer : MonoBehaviour
@@ -14,6 +15,7 @@ public class Gameplayer : MonoBehaviour
 
     private void Start()
     {
+        AudioManager.Instance.PlayBGM(AudioManager.Instance.Playlist[0]);
         PauseManager = new PauseManager();
         View.ShowToast("Press 'Space' to start \n Your old Score " + SaveSystem.GetInstance().Data.Score);
         Play();
