@@ -64,7 +64,7 @@ public class BuffSpawner : MonoBehaviour
             case nameof(TypeBuffEnum.EXPANDED):
                 return new ExpandedBuff(Platform);
             default:
-                Debug.Log("Enum is not finded " + type);
+                Debug.Log("Enum is not found " + type);
                 return new EmptyBuff();
         }
     }
